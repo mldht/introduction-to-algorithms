@@ -33,14 +33,17 @@ void find_opt_activities_recursive(struct activity *list, int *opt_list, int siz
 	}
 
 	int k = opt_list[*opt_count -1];
-	if(list[index].start >= list[k].end)
+	while(index < size && list[index].start < list[k].end)
+	{
+		index++;
+	}
+	if( index < size)
 	{
 		opt_list[*opt_count] = index;
 		*opt_count = *opt_count + 1;
+		find_opt_activities_recursive(list, opt_list, size, index, opt_count);
 	}
 
-	index++;
-	find_opt_activities_recursive(list, opt_list, size, index, opt_count);
 }
 
 int main(void)
