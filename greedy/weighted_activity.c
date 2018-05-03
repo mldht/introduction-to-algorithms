@@ -23,6 +23,43 @@ int get_last_compatible_activity(struct activity *list, int activity_index)
 	return i;
 }
 
+int get_last_compatible_activity2(struct activity *list, int activity_index)
+{
+	int left_index = 0;
+	int right_index = activity_index - 1;
+	while(left_index <= right_index)
+	{
+		if(left_index == right_index)
+		{
+			if(list[right_index].end <= list[activity_index].start)
+			{
+				return right_index;
+			}
+			else
+			{
+				return right_index - 1;
+			}
+		}
+		else
+		{
+			int mid = (left_index + right_index) / 2;
+			if(list[mid].end < list[activity_index].start)
+			{
+				left_index = mid + 1;
+			}
+			else if( list[mid].end > list[activity_index].start)
+			{
+				right_index = mid - 1;
+			}
+			else
+			{
+				return mid;
+			}
+		}
+	}
+}
+
+
 void get_max_valued_activities( struct activity *list, int size)
 {
 	int values[MAX_ACTIVITY_NUM];
@@ -47,7 +84,7 @@ void get_max_valued_activities( struct activity *list, int size)
 			}
 		}
 */
-		int compatible_index = get_last_compatible_activity(list, i);
+		int compatible_index = get_last_compatible_activity2(list, i);
 		int tmp;
 		if(compatible_index < 0)
 		{
