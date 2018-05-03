@@ -9,6 +9,19 @@ struct activity
 	int value;
 };
 
+int get_last_compatible_activity(struct activity *list, int activity_index)
+{
+	int i;
+	for(i = activity_index - 1; i >= 0; i--)
+	{
+		if(list[i].end <= list[activity_index].start)
+		{
+			break;
+		}
+	}
+
+	return i;
+}
 
 void get_max_valued_activities( struct activity *list, int size)
 {
@@ -23,25 +36,26 @@ void get_max_valued_activities( struct activity *list, int size)
 
 	values[0] = list[0].value;
 
-	int j;
+//	int j;
 	for(i = 1; i < size; i++)
 	{
-		for(j = i - 1; j >= 0; j--)
+/*		for(j = i - 1; j >= 0; j--)
 		{
 			if(list[j].end <= list[i].start)
 			{
 				break;
 			}
 		}
-
-		int tmp = 0;
-		if(j < 0)
+*/
+		int compatible_index = get_last_compatible_activity(list, i);
+		int tmp;
+		if(compatible_index < 0)
 		{
 			tmp = 0;
 		}
 		else
 		{
-			 tmp =values[j];
+			 tmp =values[compatible_index];
 		}
 
 		if( tmp + list[i].value > values[i - 1])
