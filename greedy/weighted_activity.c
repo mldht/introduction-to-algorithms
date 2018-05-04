@@ -63,13 +63,16 @@ int get_last_compatible_activity2(struct activity *list, int activity_index)
 void get_max_valued_activities( struct activity *list, int size)
 {
 	int values[MAX_ACTIVITY_NUM];
-	int compa_activitiy_map[MAX_ACTIVITY_NUM];
+	int compa_activity_map[MAX_ACTIVITY_NUM];
+	int activity_select_flag[MAX_ACTIVITY_NUM];
 
 	int i;
 	for(i = 0; i < size; i++)
 	{
 		values[i] = 0;
 	}
+	compa_activity_map[0] = -1;
+	activity_select_flag[0] = 1;
 
 	values[0] = list[0].value;
 
@@ -85,6 +88,9 @@ void get_max_valued_activities( struct activity *list, int size)
 		}
 */
 		int compatible_index = get_last_compatible_activity2(list, i);
+
+		compa_activity_map[i] = compatible_index;
+
 		int tmp;
 		if(compatible_index < 0)
 		{
@@ -98,14 +104,34 @@ void get_max_valued_activities( struct activity *list, int size)
 		if( tmp + list[i].value > values[i - 1])
 		{
 			values[i] = tmp + list[i].value;
+			activity_select_flag[i] = 1;
 		}
 		else
 		{	
 			values[i] = values[i-1];
+			activity_select_flag[i] = 0;
 		}
 	}
 	
 	printf("%d\n", values[size -1]);
+
+
+
+	for( i = size-1; i >= 0;)
+	{
+		if(activity_select_flag[i] == 1)
+		{
+			printf("activity: %d, value: %d \n", i, list[i].value);
+			i = compa_activity_map[i];
+		}
+		else
+		{
+			i--;
+		}
+
+	}
+
+	printf("\n");
 }
 
 
